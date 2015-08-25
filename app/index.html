@@ -29,6 +29,7 @@
 
   <link rel="import" href="x-boffin.html">
   <link rel="import" href="x-baffle.html">
+  <link rel="import" href="x-library.html">
   <style is="custom-style">
     body {
       @apply(--paper-font-common-base);
@@ -57,6 +58,7 @@
         <div class="layout vertical">
           <div><x-boffin authed="[[authstate]]"></x-boffin></div>
           <div><x-baffle authed="{{authstate}}"></x-baffle></div>
+          <div><x-library></x-library></div>
         </div>
       </template>
     </paper-header-panel>

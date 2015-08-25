@@ -1,0 +1,90 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/paper-button/paper-button.html">
+<link rel="import" href="bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="bower_components/firebase-element/firebase-document.html">
+<link rel="import" href="bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="bower_components/paper-styles/default-theme.html">
+<link rel="import" href="bower_components/paper-styles/shadow.html">
+<link rel="import" href="bower_components/paper-styles/typography.html">
+<link rel="import" href="bower_components/paper-styles/color.html">
+
+
+<dom-module id="x-result">
+  <style>
+    :host {
+      display: block;
+      height: auto;
+      width: 90%;
+      /*max-width: 800px;*/
+      @apply(--shadow-elevation-2dp);
+      @apply(--paper-font-body1);
+      background-color: var(--paper-cyan-600);
+      margin-left: auto;
+      margin-right: auto;
+      /*margin-bottom: 20px;*/
+    
+    }
+    :host .sized {
+      min-width: 30px;
+      min-height: 30px;
+    }
+    .filler {
+      height: 40px;
+    }
+    :host .titled {
+      padding-left: 10px;
+      padding-top: 5px;
+
+    }
+    
+    :host .byline {
+      padding-left: 10px;
+
+    }
+    :host .contents {
+
+      padding-left: 10px;
+
+    }
+  </style>
+  <template>
+      <paper-toolbar><div class="title">{{title}}</div></paper-toolbar>
+      <div class="layout horizontal start">
+        <iron-image preload fade class="sized" src="{{img}}"></iron-image>
+        <div class="layout vertical">
+          <div style="white-space: pre-wrap" class="titled">{{title}}</div>
+          <div class="byline">{{author}}</div>
+          <div class="contents">{{contents}}</div>
+          <content> 
+          </content>
+        </div>
+      </div>
+
+
+  </template>
+  <script>
+    Polymer({
+      is: "x-result",
+      properties: {
+        title: {
+          type: String,
+          value: "Best Review"
+        },
+        author: {
+          type: String,
+          value: "John Oberbeck"
+        },
+        img: {
+          type: String,
+          value: "",
+        },
+        contents: {
+          type: String
+        }
+      },
+
+    });
+  </script>
+</dom-module>
