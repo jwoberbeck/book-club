@@ -1,5 +1,6 @@
 <link rel="import" href="bower_components/polymer/polymer.html">
 <link rel="import" href="bower_components/paper-button/paper-button.html">
+<link rel="import" href="bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="bower_components/firebase-element/firebase-auth.html">
 <link rel="import" href="bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="bower_components/iron-icons/iron-icons.html">
@@ -13,7 +14,7 @@
   <style>
     :host {
       display: block;
-      background-color: var(--paper-grey-100);
+      /*background-color: var(--paper-grey-100);*/
     }
   </style>
   <template>
@@ -37,6 +38,8 @@
         <h3>Login status:</h3>
         <p>{{computeLoginStatus(statusKnown, user)}}</p>
       </div>
+
+    <!-- <paper-fab icon="home" on-click="status"></paper-fab> -->
       
     <paper-button hidden$="{{computeLoginHidden(statusKnown, user)}}"
     on-click="login">
@@ -87,24 +90,24 @@
       },
 
       handleLogin: function(e) {
-        console.log("event is called!!")
-        console.log(e);
-        console.log(e.detail.user);
+        // console.log("event is called!!")
+        // console.log(e);
+        // console.log(e.detail.user);
         var next = {};
         next[e.detail.user.uid] = {
           "uid": e.detail.user.uid, "email": e.detail.user.google.email
           };
         this.users = next;
         this.authed = true;
-        console.log(this.authed);
       },
+
+
 
       login: function() {
         this.$.firebaseLogin.login({'scope':'email'});
       },
       logout: function() {
         this.authed = false;
-        console.log(this.authed);
         this.$.firebaseLogin.logout();
       },
       errorHandler: function(e) {
@@ -113,10 +116,12 @@
       },
       computeLoginStatus: function(statusKnown, user) {
         if (statusKnown && user) {
+          this.authed = true;
           return 'Hello, ' + user.google.displayName;
 
         }
         if (statusKnown) {
+          this.authed = false;
           return 'Please sign in';
         }
         return 'Unknown (checking status...)';
@@ -124,6 +129,10 @@
       computeLoginHidden: function(statusKnown, user) {
         this.computeLoginStatus(statusKnown, user);
         return !statusKnown || !!user;
+      },
+
+      status: function() {
+        console.log("authed: " + this.authed);
       },
       computeLogoutHidden: function(statusKnown, user) {
         return !statusKnown || !user;

@@ -1,5 +1,5 @@
 <link rel="import" href="bower_components/polymer/polymer.html">
-<link rel="import" href="bower_components/paper-button/paper-button.html">
+<link rel="import" href="bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="bower_components/paper-toolbar/paper-toolbar.html">
 <link rel="import" href="bower_components/firebase-element/firebase-document.html">
 <link rel="import" href="bower_components/iron-icon/iron-icon.html">
@@ -27,7 +27,7 @@
     
     }
     :host .sized {
-      min-width: 30px;
+      min-width: 128px;
       min-height: 30px;
     }
     .filler {
@@ -50,17 +50,26 @@
     }
   </style>
   <template>
-      <paper-toolbar><div class="title">{{title}}</div></paper-toolbar>
-      <div class="layout horizontal start">
-        <iron-image preload fade class="sized" src="{{img}}"></iron-image>
-        <div class="layout vertical">
-          <div style="white-space: pre-wrap" class="titled">{{title}}</div>
-          <div class="byline">{{author}}</div>
-          <div class="contents">{{contents}}</div>
-          <content> 
-          </content>
-        </div>
+    <firebase-document
+      location="https://book-club.firebaseio.com/booklist/books" data="{{books}}"
+      log><firebase-document>
+    <paper-toolbar>
+      <div class="title">{{title}}</div>
+      <!-- <paper-fab icon="home" on-click="status"></paper-fab> -->
+      <paper-fab icon="add" hidden$="{{computeInList(inlist)}}" suffix on-click="addBook"></paper-fab>
+      <paper-fab icon="remove" hidden$="{{computeOutOfList(inlist)}}"
+      suffix on-click="removeBook"></paper-fab>
+    </paper-toolbar>
+    <div class="layout horizontal start">
+      <iron-image preload fade class="sized" src="{{img}}"></iron-image>
+      <div class="layout vertical">
+        <div style="white-space: pre-wrap" class="titled">{{title}}</div>
+        <div class="byline">{{author}}</div>
+        <div class="contents">{{computeContent(contents)}}</div>
+        <content> 
+        </content>
       </div>
+    </div>
 
 
   </template>
@@ -80,10 +89,57 @@
           type: String,
           value: "",
         },
+        isbn: {
+          type: String,
+          value: "",
+        },
         contents: {
           type: String
+        },
+        inlist: {
+          type: Boolean,
+          value: false
+        },
+        authed: {
+          type: Boolean,
+          value: undefined,
+          notify: true
         }
       },
+
+      computeInList: function(inlist) {
+        return inlist ;
+      },
+
+      computeContent: function(contents) {
+        return contents.substring(0,400)+"...";
+      },
+
+      computeOutOfList: function(inlist) {
+        return !(inlist);
+      },
+
+      status: function() {
+        console.log("authed: " + this.authed);
+        console.log("inlist: " + this.inlist);
+      },
+
+      addBook: function() {
+        var book = {};
+        book[this.isbn] = {
+          "title": this.title,
+          "author": this.author,
+          "isbn": this.isbn,
+          "img": this.img,
+          "description": this.contents}
+        this.books = book;
+      },
+
+      removeBook: function() {
+        var book = {};
+        book[this.isbn] = {};
+        this.books = book;
+      }
 
     });
   </script>

@@ -2,7 +2,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
-  <link rel="shortcut icon" type="image/png" href="img/soundreviews.ico"/>
+<!--   <link rel="shortcut icon" type="image/png" href="img/soundreviews.ico"/> -->
 
   <title>APM Book Club</title>
 
@@ -19,7 +19,7 @@
   <link rel="import" href="bower_components/paper-header-panel/paper-header-panel.html">
   <link rel="import" href="bower_components/paper-toolbar/paper-toolbar.html">
   <link rel="import" href="bower_components/paper-drawer-panel/paper-drawer-panel.html">
-  <link rel="import" href="bower_components/paper-button/paper-button.html">
+  <link rel="import" href="bower_components/paper-fab/paper-fab.html">
 
   <link rel="import" href="bower_components/paper-styles/paper-styles.html">
   <link rel="import" href="bower_components/paper-styles/default-theme.html">
@@ -30,6 +30,10 @@
   <link rel="import" href="x-boffin.html">
   <link rel="import" href="x-baffle.html">
   <link rel="import" href="x-library.html">
+  <link rel="import" href="x-booklist.html">
+
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
   <style is="custom-style">
     body {
       @apply(--paper-font-common-base);
@@ -39,30 +43,40 @@
         background-color: var(--paper-blue-grey-200);
       };
     }
+    #status {
+      background-color: var(--paper-green-500);
+    }
     paper-toolbar#tooldrawer {
       background-color: var(--paper-blue-grey-500);
     }
   </style>
 </head>
 <body class="fullbleed layout vertical">
-  <paper-drawer-panel>
-    <paper-header-panel drawer>
-      <paper-toolbar id="tooldrawer">
-      </paper-toolbar>
-    </paper-header-panel>
-    <paper-header-panel main>
-      <paper-toolbar>
-        <div class="Title">APM Book Club</div>
-      </paper-toolbar>
-      <template is="dom-bind">
-        <div class="layout vertical">
-          <div><x-boffin authed="[[authstate]]"></x-boffin></div>
-          <div><x-baffle authed="{{authstate}}"></x-baffle></div>
-          <div><x-library></x-library></div>
-        </div>
-      </template>
-    </paper-header-panel>
-  </paper-drawer-panel>
+  
+  <template is="dom-bind">
+    <paper-drawer-panel>
+      <paper-header-panel drawer>
+        <paper-toolbar id="tooldrawer">
+        </paper-toolbar>
+        <div><x-baffle authed="{{authstate}}"></x-baffle></div>
+      </paper-header-panel>
+      <paper-header-panel main>
+        <paper-toolbar>
+          <div class="Title">APM Book Club</div>
+        </paper-toolbar>
+          <div class="layout vertical">
+            
+            <div><x-booklist isauthed="[[authstate]]"></x-booklist></div>
+            <!-- <paper-fab id="status" icon="home"></paper-fab> -->
+            <!-- <div><x-boffin authed="[[authstate]]"></x-boffin></div> -->
+            
+            <div><x-library isauthed="[[authstate]]"></x-library></div>
+          </div>
+      </paper-header-panel>
+    </paper-drawer-panel>
+  </template>
+    
+  
   <script>
 
     $(document).ready(function() {

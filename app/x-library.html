@@ -30,23 +30,21 @@
     }
   </style>
   <template>
-    <firebase-document
-      location="https://book-club.firebaseio.com/boffin/index" data="{{index}}"
-      log><firebase-document>
-      <paper-toolbar><div class="title">Search for a Book</div></paper-toolbar>
-      <paper-input value="{{query::input}}"
-      id="queryform" label="query" on-change="search">
-        <iron-icon icon="search" prefix></iron-icon>
-        <paper-icon-button suffix on-click="clearInput" icon="clear"></paper-icon-button>
+    <paper-toolbar><div class="title">Search for a Book</div></paper-toolbar>
+    <paper-input value="{{query::input}}"
+    id="queryform" label="query" on-change="search">
+      <iron-icon icon="search" prefix></iron-icon>
+      <paper-icon-button suffix on-click="clearInput" icon="clear"></paper-icon-button>
 <!--         <paper-button on-click="request">
-          <iron-icon icon="search"></iron-icon>
-        </paper-button> -->
-      </paper-input>
-      <template is="dom-repeat" items="{{results}}">
-        <x-result title="{{item.title}}" author="{{item.author}}"
-        img="{{item.imageLink}}">
-        </x-result>
-      </template>
+        <iron-icon icon="search"></iron-icon>
+      </paper-button> -->
+    </paper-input>
+    <template is="dom-repeat" items="{{results}}">
+      <x-result title="{{item.title}}" author="{{item.author}}"
+      img="{{item.imageLink}}" authed="{{isauthed}}" contents="{{item.description}}"
+      isbn="{{item.isbn}}">
+      </x-result>
+    </template>
 
   </template>
   <script>
@@ -65,6 +63,10 @@
         query: {
           type: String,
           value: ""
+        },
+        isauthed: {
+          type: Boolean,
+          notify: true
         }
       },
 
@@ -140,6 +142,8 @@
           }
           arry.push({"author": author,
             "title": volume.title,
+            "isbn": isbn,
+            "description": volume.description,
             "imageLink": img});
         }
         // var ret = {};

@@ -1,0 +1,57 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/paper-button/paper-button.html">
+<link rel="import" href="bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="bower_components/firebase-element/firebase-collection.html">
+<link rel="import" href="bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="bower_components/paper-styles/default-theme.html">
+<link rel="import" href="bower_components/paper-styles/shadow.html">
+<link rel="import" href="bower_components/paper-styles/typography.html">
+<link rel="import" href="bower_components/paper-styles/color.html">
+
+<link rel="import" href="x-result.html">
+
+
+<dom-module id="x-booklist">
+  <style>
+    paper-toast {
+      position: absolute;
+      @apply(--shadow-elevation-20dp);
+    }
+  </style>
+  <template>
+    <firebase-collection
+      location="https://book-club.firebaseio.com/booklist/books"
+      data="{{books}}"
+      log><firebase-collection>
+    <h2>A list of books we've added:</h2>
+<!--     <paper-fab icon="home" on-click="status"></paper-fab> -->
+    <template is="dom-repeat" items="{{books}}">
+      <x-result title="{{item.title}}" author="{{item.author}}"
+        img="{{item.img}}" contents="{{item.description}}" isbn="{{item.isbn}}" inlist authed="{{isauthed}}">
+      </x-result>
+    </template>
+  </template>
+  <script>
+    Polymer({
+      is: "x-booklist",
+      properties: {
+        books: {
+          type: Object,
+          notify: true
+        },
+        isauthed: {
+          type: Boolean,
+          notify: true
+        }
+        
+      },
+      // status: function() {
+      //   console.log("authed: " + this.isauthed);
+      // },
+
+    });
+  </script>
+</dom-module>
