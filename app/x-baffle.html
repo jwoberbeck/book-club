@@ -2,9 +2,11 @@
 <link rel="import" href="bower_components/paper-button/paper-button.html">
 <link rel="import" href="bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="bower_components/firebase-element/firebase-auth.html">
+<link rel="import" href="bower_components/firebase-element/firebase-document.html">
 <link rel="import" href="bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="bower_components/paper-input/paper-input.html">
 <link rel="import" href="bower_components/paper-styles/default-theme.html">
 <link rel="import" href="bower_components/paper-styles/shadow.html">
 <link rel="import" href="bower_components/paper-styles/typography.html">
@@ -33,13 +35,16 @@
     <firebase-document
       location="https://book-club.firebaseio.com/baffle/users" data="{{users}}"
       log><firebase-document>
+    <firebase-document
+      location="https://book-club.firebaseio.com/booklist/members" data="{{members}}"
+      log><firebase-document>
     <div>
       <div>
         <h3>Login status:</h3>
         <p>{{computeLoginStatus(statusKnown, user)}}</p>
       </div>
 
-    <!-- <paper-fab icon="home" on-click="status"></paper-fab> -->
+    <paper-fab icon="home" on-click="status"></paper-fab>
       
     <paper-button hidden$="{{computeLoginHidden(statusKnown, user)}}"
     on-click="login">
@@ -51,6 +56,14 @@
     <div>Log out</div>
       <iron-icon icon="account-circle"></iron-icon>
     </paper-button>
+    <paper-input value="{{member::input}}"
+    id="memberform" label="Add a member" on-change="addMember">
+      <iron-icon icon="search" prefix></iron-icon>
+      <paper-icon-button suffix on-click="clearInput" icon="clear"></paper-icon-button>
+<!--         <paper-button on-click="request">
+        <iron-icon icon="search"></iron-icon>
+      </paper-button> -->
+    </paper-input>
 
   </template>
   <script>
@@ -83,10 +96,36 @@
         authed: {
           type: Boolean,
           notify: true
-        }
+        },
+        member: {
+          type: String,
+          value: ""
+        },
       },
       listeners: {
         'login': 'handleLogin'
+      },
+
+      addMember: function(e) {
+        console.log(this.member);
+        console.log(this.users);
+        console.log("post");
+        for (var user in this.users) {
+          if (this.users.hasOwnProperty(user)) {
+            console.log(this.users[user].email);
+            if(this.member == this.users[user].email) {
+              var mem = {}
+              mem[this.users[user].uid] = this.users[user];
+              this.members = mem;
+              return;
+            }
+          }
+        }
+      },
+
+      clearInput: function() {
+        document.querySelector('#memberform').value = "";
+        this.member = "";
       },
 
       handleLogin: function(e) {
@@ -133,6 +172,7 @@
 
       status: function() {
         console.log("authed: " + this.authed);
+        console.log(user);
       },
       computeLogoutHidden: function(statusKnown, user) {
         return !statusKnown || !user;
